@@ -13,14 +13,14 @@ impl Index<usize> for ModuloMatrix {
     type Output = [Imod];
 
     fn index(&self, row: usize) -> &Self::Output {
-        assert!(row < self.size);
+        debug_assert!(row < self.size);
         &self.mat[self.row_range(row)]
     }
 }
 
 impl IndexMut<usize> for ModuloMatrix {
     fn index_mut(&mut self, row: usize) -> &mut Self::Output {
-        assert!(row < self.size);
+        debug_assert!(row < self.size);
         let range = self.row_range(row);
         &mut self.mat[range] 
     }
@@ -49,14 +49,14 @@ impl ModuloMatrix {
     /// Changes size of a matrix to a given value </br>
     /// **Note**: `new_size` must be lower than initial size of matrix
     pub fn resize(&mut self, new_size: usize) {
-        assert!(new_size < self.initial_size);
+        debug_assert!(new_size < self.initial_size);
 
         self.size = new_size
     }
     /// Swaps row of matrix
     pub fn swap_row(&mut self, row_a: usize, row_b: usize) {
-        assert!(row_a < self.size);
-        assert!(row_b < self.size);
+        debug_assert!(row_a < self.size);
+        debug_assert!(row_b < self.size);
 
         let a_start = row_a * self.initial_size;
         let b_start = row_b * self.initial_size;
@@ -67,8 +67,8 @@ impl ModuloMatrix {
     }
     /// Swaps columns of matrix
     pub fn swap_col(&mut self, col_a: usize, col_b: usize) {
-        assert!(col_a < self.size);
-        assert!(col_b < self.size);
+        debug_assert!(col_a < self.size);
+        debug_assert!(col_b < self.size);
 
         for i in 0..self.size {
             let offset = i * self.initial_size;
@@ -78,8 +78,8 @@ impl ModuloMatrix {
     /// Substracts `src_row` multiplied by `multiplier` from `trg_row` <br/>
     /// src -= trg * mult
     pub fn sub_row_mult(&mut self, src_row: usize, trg_row: usize, muiltiplier: Imod) {
-        assert!(src_row < self.size);
-        assert!(trg_row < self.size);
+        debug_assert!(src_row < self.size);
+        debug_assert!(trg_row < self.size);
 
         for i in 0..self.size {
             let tmp = self[src_row][i] * muiltiplier;
@@ -89,7 +89,7 @@ impl ModuloMatrix {
 
     /// Multiplies row by multiplier
     pub fn multiply_row(&mut self, row: usize, muiltiplier: Imod) {
-        assert!(row < self.size);
+        debug_assert!(row < self.size);
 
         for i in 0..self.size {
             self[row][i] = self[row][i] * muiltiplier;

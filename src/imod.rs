@@ -69,6 +69,7 @@ impl ops::Div for Imod {
     type Output = Self;
 
     fn div(self, rhs: Self) -> Self::Output {
+        debug_assert!(rhs.value != 0);
         self * rhs.inv()
     }
 }
