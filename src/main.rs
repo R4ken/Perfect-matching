@@ -65,8 +65,12 @@ fn main() {
                     let res = ModuloMatrix::reduce_rows_and_columns(&mut mat, &mut inv, i, j);
                     if res.is_ok() {
                         println!("{} {}", id[i], id[j]);
-                        id.swap(i, n - 1);
-                        id.swap(j, n - 2);
+                        for k in j..n - 1 {
+                            id.swap(k, k + 1);
+                        }
+                        for k in i..n - 1 {
+                            id.swap(k, k + 1);
+                        }
                         n -= 2;
                         continue 'reduce_vertices;
                     }

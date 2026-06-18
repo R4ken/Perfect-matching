@@ -151,26 +151,43 @@ impl ModuloMatrix {
         Some(p_m)
     }
 
-    // Swaps rows and collumns to end of a matrix, calculates smaller matrix (and its inverse) and lowers its size
-    pub fn reduce_rows_and_columns(matrix: &mut ModuloMatrix, inv_matrix: &mut ModuloMatrix, a: usize, b: usize) -> Result<(),()> {
+    /// Swaps rows and collumns to end of a matrix, calculates smaller matrix (and its inverse) and lowers its size <br/>
+    /// Function is used to try to *remove* vertices a and b from a graph
+    pub fn reduce_rows_and_columns(matrix: &mut ModuloMatrix, inv_matrix: &mut ModuloMatrix, mut a: usize, mut b: usize) -> Result<(),()> {
         let n = matrix.size - 1;
         let substract = inv_matrix[a][a] * inv_matrix[b][b];
-        if inv_matrix[b][a] == Imod::from(0) || inv_matrix[a][b] - substract / inv_matrix[b][a] == Imod::from(0){
+        if inv_matrix[b][a] == Imod::from(0) || inv_matrix[a][b] - substract / inv_matrix[b][a] == Imod::from(0) {
             return Err(());
         }
-        matrix.swap_row(a, n);
-        matrix.swap_col(a, n);
-        inv_matrix.swap_col(a, n);
-        inv_matrix.swap_row(a, n);
+        for i in a..n {
+            matrix.swap_row(i, i + 1);
+            inv_matrix.swap_col(i, i + 1);
+        }
+        for i in b..n {
+            matrix.swap_col(i, i + 1);
+            inv_matrix.swap_row(i, i + 1);
+        }
         for i in 0..n {
             for j in 0..n {
                 inv_matrix[i][j] = inv_matrix[i][j] - inv_matrix[i][n] * inv_matrix[n][j] / inv_matrix[n][n];
             }
         }
-        matrix.swap_row(b, n - 1);
-        matrix.swap_col(b, n - 1);
-        inv_matrix.swap_col(b, n - 1);
-        inv_matrix.swap_row(b, n - 1);
+        matrix.resize(n);
+        inv_matrix.resize(n);
+        if a < b {
+            b -= 1;
+        }
+        else {
+            a -= 1;
+        }
+        for i in b..n - 1 {
+            matrix.swap_row(i, i + 1);
+            inv_matrix.swap_col(i, i + 1);
+        }
+        for i in a..n - 1 {
+            matrix.swap_col(i, i + 1);
+            inv_matrix.swap_row(i, i + 1);
+        }
         for i in 0..n - 1 {
             for j in 0..n - 1 {
                 inv_matrix[i][j] = inv_matrix[i][j] - inv_matrix[i][n - 1] * inv_matrix[n - 1][j] / inv_matrix[n - 1][n - 1];
