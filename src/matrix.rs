@@ -228,7 +228,21 @@ mod tests {
                 test_m[r][c] = Imod::from(val);
             }
         }
+        let raw_matrix_small = [
+            [7, 1, 2],
+            [1, 8, 2],
+            [2, 1, 9],
+        ];
+        let mut test_m_small = ModuloMatrix::new(3);
+        for (r, row) in raw_matrix_small.iter().enumerate() {
+            for (c, &val) in row.iter().enumerate() {
+                test_m_small[r][c] = Imod::from(val);
+            }
+        }
         let Some(mut inv_m) = test_m.calculate_inverse() else {
+            panic!("Not invertible")
+        };
+        let Some(mut inv_m_small) = test_m_small.calculate_inverse() else {
             panic!("Not invertible")
         };
         let res = ModuloMatrix::reduce_rows_and_columns(&mut test_m, &mut inv_m, 0, 1);
@@ -247,6 +261,7 @@ mod tests {
                 else {
                     assert_eq!(v, Imod::from(0));
                 }
+                assert_eq!(inv_m_small[i][j], inv_m[i][j]);
             }
         }
     }
