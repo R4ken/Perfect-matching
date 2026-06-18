@@ -56,11 +56,7 @@ fn main() {
     println!("True");
     'reduce_vertices: while n > 0 {
         for i in 0..n {
-            for j in i..n {
-                if i == j {
-                    continue;
-                }
-                // println!("{} {} {} {}", i, j, mat[i][j].value, inv[i][j].value);
+            for j in i + 1..n {
                 if mat[i][j] != z && inv[i][j] != z {
                     let res = ModuloMatrix::reduce_rows_and_columns(&mut mat, &mut inv, i, j);
                     if res.is_ok() {
@@ -77,5 +73,6 @@ fn main() {
                 }
             }
         }
+        panic!("Endless loop")
     }
 }
