@@ -58,8 +58,8 @@ impl ModuloMatrix {
         assert!(row_a < self.size);
         assert!(row_b < self.size);
 
-        let a_start = row_a * self.size;
-        let b_start = row_b * self.size;
+        let a_start = row_a * self.initial_size;
+        let b_start = row_b * self.initial_size;
         for i in 0..self.size {
             self.mat.swap(a_start + i, b_start + i);
         }
@@ -71,7 +71,7 @@ impl ModuloMatrix {
         assert!(col_b < self.size);
 
         for i in 0..self.size {
-            let offset = i * self.size;
+            let offset = i * self.initial_size;
             self.mat.swap(col_a + offset, col_b + offset);
         }
     }
