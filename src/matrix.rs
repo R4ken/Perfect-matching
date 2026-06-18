@@ -116,6 +116,11 @@ impl ModuloMatrix {
                 }
                 p_m.swap_row(i, swap_row);
                 u_m.swap_row(i, swap_row);
+                for j in 0..i {
+        			 let tmp = l_m[i][j];
+                     l_m[i][j] = l_m[swap_row][j];
+                     l_m[swap_row][j] = tmp;
+                }
             }
             for j in i + 1 .. self.size {
                 let wsp = u_m[j][i] / u_m[i][i];
