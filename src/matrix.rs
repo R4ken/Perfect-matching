@@ -259,7 +259,7 @@ mod tests {
         let Some(mut inv_m) = test_m.calculate_inverse() else {
             panic!("Not invertible")
         };
-        let Some(mut inv_m_small) = test_m_small.calculate_inverse() else {
+        let Some(inv_m_small) = test_m_small.calculate_inverse() else {
             panic!("Not invertible")
         };
         let res = ModuloMatrix::reduce_rows_and_columns(&mut test_m, &mut inv_m, 0, 1);
