@@ -1,7 +1,13 @@
 use core::fmt;
 use std::ops;
+use std::collections::HashMap;
+use std::cell::RefCell;
 
 const M: i64 = 1e9 as i64 + 7;
+
+thread_local! {
+    static CACHE: RefCell<HashMap<i64, Imod>> = RefCell::new(HashMap::new());
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct Imod {
@@ -9,21 +15,33 @@ pub struct Imod {
 }
 
 impl Imod {
-
     pub fn inv(&self) -> Imod {
-        let mut inv: i64 = 1;
-        let mut pow= M - 2;
-        let mut a = self.value;
-        while pow > 0{
-            if pow & 1 == 1 {
-                inv *= a;
-                inv %= M;
+        CACHE.with(|cache_cell| {
+            let mut cache = cache_cell.borrow_mut();
+
+            if let Some(&cached_inv) = cache.get(&self.value) {
+                return cached_inv;
             }
-            pow >>= 1;
-            a *= a;
-            a %= M;
-        }
-        Imod { value: inv }
+
+            let mut inv: i64 = 1;
+            let mut pow = M - 2;
+            let mut a = self.value;
+            
+            while pow > 0 {
+                if pow & 1 == 1 {
+                    inv *= a;
+                    inv %= M;
+                }
+                pow >>= 1;
+                a *= a;
+                a %= M;
+            }
+
+            let result = Imod { value: inv };
+            cache.insert(self.value, result);
+            cache.insert(inv, self.clone());
+            result
+        })
     }
 }
 
