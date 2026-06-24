@@ -24,7 +24,7 @@ fn main() {
     let mut reader = stdin.lock(); 
     let mut buffer = String::with_capacity(64);
     let mut rng = rand::rng();
-    let modulo = 1e9 as i32 + 7;
+    const MOD: i32 = 1_000_000_007;
     let z = Imod::from(0);
 
     let mut n;
@@ -43,7 +43,7 @@ fn main() {
             (u, v) = (v, u);
         }
         mat[u][v] = Imod::from(num);
-        mat[v][u] = Imod::from(modulo - num)
+        mat[v][u] = Imod::from(MOD - num)
     }
     if n % 2 != 0 {
         println!("FALSE");

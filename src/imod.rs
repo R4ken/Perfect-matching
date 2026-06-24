@@ -3,7 +3,7 @@ use std::ops;
 use std::collections::HashMap;
 use std::cell::RefCell;
 
-const M: i64 = 1e9 as i64 + 7;
+const M: i64 = 1_000_000_007;
 
 thread_local! {
     static CACHE: RefCell<HashMap<i64, Imod>> = RefCell::new(HashMap::new());
